@@ -17,3 +17,10 @@ try:
     print(response.headers)
 except Exception as e:
     print(e.message)
+
+# print("Hello real world!")
+
+# cron = CronTab('username')
+
+# /Users/alexanderaboutanos/Desktop/Coding/Springboard/Auguri/app.py
+# /Users/alexanderaboutanos/Desktop/Coding/SpringBoard/Auguri/venv/bin/python

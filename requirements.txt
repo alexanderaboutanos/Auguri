@@ -1,6 +1,9 @@
 autopep8==1.5.7
 pycodestyle==2.7.0
+python-crontab==2.5.1
+python-dateutil==2.8.2
 python-http-client==3.3.2
 sendgrid==6.8.1
+six==1.16.0
 starkbank-ecdsa==1.1.1
 toml==0.10.2
