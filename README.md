@@ -3,4 +3,4 @@
 API: https://sendgrid.com/
 CronJobs
 
-![image of database](SQL_Database.png)
+![image of database](static/images/SQL_Database.png)
