@@ -3,3 +3,4 @@ __pycache__
 .vscode
 sendgrid.env
 /src/__pycache__
+/seed/__pycache__

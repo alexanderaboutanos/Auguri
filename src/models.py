@@ -89,12 +89,12 @@ class Relationship(db.Model):
         autoincrement=True
     )
 
-    person_1 = db.Column(
+    person1_id = db.Column(
         db.Integer,
         db.ForeignKey('people.id')
     )
 
-    person_2 = db.Column(
+    person2_id = db.Column(
         db.Integer,
         db.ForeignKey('people.id')
     )
@@ -115,12 +115,12 @@ class Greeting(db.Model):
         autoincrement=True
     )
 
-    sender = db.Column(
+    sender_id = db.Column(
         db.Integer,
         db.ForeignKey('people.id')
     )
 
-    recipient = db.Column(
+    recipient_id = db.Column(
         db.Integer,
         db.ForeignKey('people.id')
     )

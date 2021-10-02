@@ -20,6 +20,10 @@ connect_db(app)
 # db.create_all()
 
 
+def var1():
+    print('10')
+
+
 @app.route('/')
 def homepage():
     """show homepage"""
