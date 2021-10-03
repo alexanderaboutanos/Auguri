@@ -16,15 +16,14 @@ app.config['SECRET_KEY'] = "abc123"
 
 connect_db(app)
 
-# db.drop_all()
-# db.create_all()
-
-
-def var1():
-    print('10')
-
 
 @app.route('/')
+def birthdays():
+    """show birthdays"""
+    return render_template('/auth/birthdays.html')
+
+
+@app.route('/signup')
 def homepage():
     """show homepage"""
-    return render_template('base.html')
+    return render_template('/not_auth/signup.html')
