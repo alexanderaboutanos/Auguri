@@ -57,7 +57,29 @@ def welcome():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     """ Shows page where user can sign up. Receives POST request upon signup attempt. """
-    return render_template('/not_auth/signup.html')
+
+    form = SignUpForm()
+
+    if form.validate_on_submit():
+        try:
+            person = Person.signup(
+                email_address=form.email_address.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                img_url=form.img_url.data,
+                birthday=form.birthday.data,
+                username=form.username.data,
+                password=form.password.data
+            )
+            db.session.commit()
+        except:
+            return render_template('/not_auth/signup.html')
+
+        execute_login(person)
+
+        return redirect('/')
+
+    return render_template('/not_auth/signup.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])

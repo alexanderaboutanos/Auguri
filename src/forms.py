@@ -19,8 +19,8 @@ class SignUpForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     """ Form used to login an existing user. """
-    username = StringField('', validators=[DataRequired()])
-    password = PasswordField('', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
 
 
 class AddFriendForm(FlaskForm):
