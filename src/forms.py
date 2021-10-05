@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, PasswordField, StringField, DateField, validators
-from wtforms.validators import DataRequired, Email, Length
+from wtforms.validators import DataRequired, Email, Length, Optional
 
 
 class SignUpForm(FlaskForm):
@@ -10,8 +10,15 @@ class SignUpForm(FlaskForm):
                                 DataRequired(), Email()])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    img_url = StringField('Personal Image URL (Optional)')
+    img_url = StringField('Personal Image URL (Optional)',
+                          validators=[Optional()])
     birthday = DateField('Birthday', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+
+
+class LoginForm(FlaskForm):
+    """ Form used to login an existing user. """
     username = StringField('', validators=[DataRequired()])
     password = PasswordField('', validators=[DataRequired()])
 
@@ -23,5 +30,5 @@ class AddFriendForm(FlaskForm):
                                 DataRequired(), Email()])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    img_url = StringField('Personal Image URL (Optional)')
+    img_url = StringField('Image URL (Optional)', validators=[Optional()])
     birthday = DateField('Birthday', validators=[DataRequired()])

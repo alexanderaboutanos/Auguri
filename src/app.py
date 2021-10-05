@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, flash, g
-
 from models import Person, Relationship, Greeting, db, connect_db
+from forms import SignUpForm, LoginForm, AddFriendForm
 
 app = Flask(__name__)
 
@@ -18,7 +18,11 @@ app.config['SECRET_KEY'] = "abc123"
 connect_db(app)
 
 
-@app.before_request()
+###############################################################
+################### BEFORE EACH REQUEST #######################
+###############################################################
+
+@app.before_request
 def update_global_variable():
     """ Check if the user is logged in on the session. If yes, add the user to Flask 'global'. Otherwise, keep the global value to None. """
 
@@ -29,19 +33,25 @@ def update_global_variable():
         g.person = None
 
 
-# NOT AUTH PAGES TO FOLLOW
+def execute_login(person):
+    """ Login the person. """
+    session[CURR_USER_KEY] = person.id
+
+
+def execute_logout():
+    """ Logout the person """
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
+###############################################################
+################# NOT-AUTH PAGES TO FOLLOW ####################
+###############################################################
 
 
 @app.route('/')
 def welcome():
     """ Welcome page, with description of the app and with links to a login or signup. """
     return render_template('/not_auth/welcome.html')
-
-
-def execute_login():
-
-
-def execute_logout():
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -53,7 +63,24 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """show homepage"""
-    return render_template('/not_auth/login.html')
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        try:
+            person = Person.authenticate(
+                username=form.username.data,
+                password=form.password.data
+            )
+            db.session.commit()
+        except:
+            return render_template('/not_auth/login.html')
+
+        execute_login(person)
+
+        return redirect('/')
+
+    return render_template('/not_auth/login.html', form=form)
 
 
 # AUTH PAGES TO FOLLOW

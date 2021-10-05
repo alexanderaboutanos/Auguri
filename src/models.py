@@ -77,6 +77,19 @@ class Person(db.Model):
         db.session.add(person)
         return person
 
+    @classmethod
+    def authenticate(cls, username, password):
+        """ Attempts to find a person with the input username and password. """
+
+        person = cls.query.filter_by(username=username).first()
+
+        if person:
+            is_auth = bcrypt.check_password_hash(person.password, password)
+            if is_auth:
+                return person
+
+        return False
+
 
 class Relationship(db.Model):
     """ This is the model for the relationships between people """
