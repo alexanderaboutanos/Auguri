@@ -1,6 +1,9 @@
+import time
 from flask import Flask, render_template, redirect, request, session, flash, g
+from sqlalchemy.orm import relationship
 from models import Person, Relationship, Greeting, db, connect_db
 from forms import SignUpForm, LoginForm, AddFriendForm
+from functions import num_days_until_bday, compile_birthday_friend_list
 
 app = Flask(__name__)
 
@@ -77,7 +80,7 @@ def signup():
 
         execute_login(person)
 
-        return redirect('/')
+        return redirect('/birthdays')
 
     return render_template('/not_auth/signup.html', form=form)
 
@@ -100,14 +103,19 @@ def login():
 
         execute_login(person)
 
-        return redirect('/')
+        return redirect('/birthdays')
 
     return render_template('/not_auth/login.html', form=form)
 
 
-# AUTH PAGES TO FOLLOW
+###############################################################
+#################### AUTH PAGES TO FOLLOW #####################
+###############################################################
 
-@app.route('/')
+@app.route('/birthdays')
 def birthdays():
     """show birthdays"""
-    return render_template('/auth/birthdays.html')
+    user_id = g.person.id
+    birthday_lst = compile_birthday_friend_list(user_id)
+    # The object is complete with first and last name, img_url, birthday, and a countdown # of days until their bday.
+    return render_template('/auth/birthdays.html', birthday_lst=birthday_lst)

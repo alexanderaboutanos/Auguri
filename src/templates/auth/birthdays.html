@@ -1,6 +1,17 @@
 <!-- @format -->
 
-{% extends 'base.html' %}{% block title %} 'Hello' {% endblock %}{% block
+{% extends 'base.html' %}{% block title %} Birthdays {% endblock %}{% block
 content %}
-<h1>hello</h1>
+<h1>Birthday List!</h1>
+<div>
+  <ul>
+    {% for person in birthday_lst %}
+    <li>
+      <p>{{person.first_name}} {{person.last_name}}</p>
+      <p>Birthday: {{person.birthday}}</p>
+      <p></p>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

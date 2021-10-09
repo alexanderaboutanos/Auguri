@@ -46,7 +46,7 @@ class Person(db.Model):
 
     username = db.Column(
         db.String(75),
-        nullable=False,
+        nullable=True,
         unique=True
     )
 
@@ -60,9 +60,18 @@ class Person(db.Model):
 
     @classmethod
     def signup(cls, email_address, first_name, last_name, img_url, birthday, username, password):
-        """ Creates a new person (remembering to hash the password). """
+        """ Creates a new person in the database.
 
-        hash_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+        If no username and password are present, the person is added as a 'friend'. 
+        If a username or password is present, the person is added as a 'user'.
+
+        Users will have their passwords hashed. """
+
+        if username != "":
+            pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+        else:
+            username = None
+            pwd = ""
 
         person = Person(
             email_address=email_address,
@@ -71,7 +80,7 @@ class Person(db.Model):
             img_url=img_url,
             birthday=birthday,
             username=username,
-            password=hash_pwd
+            password=pwd
         )
 
         db.session.add(person)
@@ -90,6 +99,19 @@ class Person(db.Model):
 
         return False
 
+    @staticmethod
+    def is_user(username):
+        """ checks if a Person is a user (account-holder). 
+
+        returns True if the Person has a username
+        returns False if the Person does not.
+
+        """
+
+        if username:
+            return True
+        return False
+
 
 class Relationship(db.Model):
     """ This is the model for the relationships between people """
@@ -102,12 +124,12 @@ class Relationship(db.Model):
         autoincrement=True
     )
 
-    person1_id = db.Column(
+    user_id = db.Column(
         db.Integer,
         db.ForeignKey('people.id')
     )
 
-    person2_id = db.Column(
+    friend_id = db.Column(
         db.Integer,
         db.ForeignKey('people.id')
     )
@@ -115,6 +137,9 @@ class Relationship(db.Model):
     relationship = db.Column(
         db.Text
     )
+
+    person_user = db.relationship('Person', foreign_keys=[user_id])
+    person_friend = db.relationship('Person', foreign_keys=[friend_id])
 
 
 class Greeting(db.Model):
