@@ -5,11 +5,12 @@ content %}
 <h1>Birthday List!</h1>
 <div>
   <ul>
-    {% for person in birthday_lst %}
+    {% for person in flask_bday_objs %}
     <li>
-      <p>{{person.first_name}} {{person.last_name}}</p>
-      <p>Birthday: {{person.birthday}}</p>
-      <p></p>
+      <p>Name: {{person['first_name']}} {{person['last_name']}}</p>
+      <p>Birthday: {{person['birthday']}}</p>
+      <p>Countdown: {{person['countdown']}}</p>
+      <img src="{{person['img_url']}}" alt="" />
     </li>
     {% endfor %}
   </ul>

@@ -112,6 +112,11 @@ class Person(db.Model):
             return True
         return False
 
+    # @classmethod
+    # def bday_countdown(cls, birthday):
+    #     num_days = num_days_until_bday(birthday)
+    #     return num_days
+
 
 class Relationship(db.Model):
     """ This is the model for the relationships between people """
