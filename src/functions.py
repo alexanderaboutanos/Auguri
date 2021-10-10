@@ -48,7 +48,8 @@ def make_flask_bday_obj(person):
         'last_name': person.last_name,
         'img_url': person.img_url,
         'countdown': num_days_until_bday(person.birthday),
-        'birthday': person.birthday
+        'birthday': person.birthday,
+        'username': person.username
     }
     return bday_obj
 

@@ -2,7 +2,7 @@ import time
 from flask import Flask, render_template, redirect, request, session, flash, g
 from sqlalchemy.orm import relationship
 from models import Person, Relationship, Greeting, db, connect_db
-from forms import EditFriendForm, SignUpForm, LoginForm, AddFriendForm
+from forms import EditFriendForm, SignUpForm, LoginForm, AddFriendForm, EditUserForm
 from functions import get_friend_list, compile_flask_bday_objs, make_flask_bday_obj
 
 app = Flask(__name__)
@@ -105,7 +105,6 @@ def login():
         )
 
         execute_login(person)
-
         return redirect('/birthdays')
 
     return render_template('/not_auth/login.html', form=form)
@@ -235,3 +234,45 @@ def add_friend():
     return render_template('/auth/friend_add.html', form=form)
 
 ##########################  USER  ############################
+
+
+@app.route('/user')
+def user_details():
+    """ Show personal user information. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # get your personal info
+    user = g.person
+
+    # prepare the user object for flask
+    flask_bday_obj = make_flask_bday_obj(user)
+
+    return render_template('/auth/user.html', user=flask_bday_obj)
+
+
+@app.route('/user/edit', methods=['GET', 'POST'])
+def edit_user():
+    """ Edit information for your own account. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # load the form
+    form = EditUserForm(obj=g.person)
+
+    # Handle POST request with new friend data
+    if form.validate_on_submit():
+        g.person.email_address = form.email_address.data
+        g.person.first_name = form.first_name.data
+        g.person.last_name = form.last_name.data
+        g.person.username = form.username.data
+        g.person.img_url = form.img_url.data
+        g.person.birthday = form.birthday.data
+        db.session.commit()
+        return redirect("/birthdays")
+
+    return render_template('/auth/user_edit.html', form=form)
