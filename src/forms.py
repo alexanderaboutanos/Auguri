@@ -32,3 +32,14 @@ class AddFriendForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired()])
     img_url = StringField('Image URL (Optional)', validators=[Optional()])
     birthday = DateField('Birthday', validators=[DataRequired()])
+
+
+class EditFriendForm(FlaskForm):
+    """ Form used for a signedin user to add a friend. """
+
+    email_address = StringField('Email Address', validators=[
+                                DataRequired(), Email()])
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
+    img_url = StringField('Image URL (Optional)', validators=[Optional()])
+    birthday = DateField('Birthday', validators=[DataRequired()])

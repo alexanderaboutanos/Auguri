@@ -2,5 +2,12 @@
 
 {% extends 'base.html' %}{% block title %} 'Hello' {% endblock %}{% block
 content %}
-<h1>hello</h1>
+<h1>Here is your friend info...</h1>
+<div>
+  <p>Name: {{friend['first_name']}} {{friend['last_name']}}</p>
+  <p>Birthday: {{friend['birthday']}}</p>
+  <p>Countdown: {{friend['countdown']}}</p>
+  <img src="{{friend['img_url']}}" alt="" />
+  <p><a href="/friend/{{friend['id']}}/edit">Edit user</a></p>
+</div>
 {% endblock %}

@@ -22,16 +22,10 @@ def compile_flask_bday_objs(friend_lst):
     # add yourself to list
     friend_lst.append(g.person)
 
-    #
+    # for each friend, pull only certain information to be sent to flask
     unsorted_bday_objs = []
     for person in friend_lst:
-        bday_obj = {
-            'first_name': person.first_name,
-            'last_name': person.last_name,
-            'img_url': person.img_url,
-            'countdown': num_days_until_bday(person.birthday),
-            'birthday': person.birthday
-        }
+        bday_obj = make_flask_bday_obj(person)
         unsorted_bday_objs.append(bday_obj)
 
     # sort birthday objects by the num days until their birthday
@@ -46,12 +40,27 @@ def compile_flask_bday_objs(friend_lst):
     return flask_bday_objs
 
 
+def make_flask_bday_obj(person):
+    """ take certain pieces from the 'person' class to be sent to flask."""
+    bday_obj = {
+        'id': person.id,
+        'first_name': person.first_name,
+        'last_name': person.last_name,
+        'img_url': person.img_url,
+        'countdown': num_days_until_bday(person.birthday),
+        'birthday': person.birthday
+    }
+    return bday_obj
+
+
 def num_days_until_bday(birthday):
     """ This function calculates the # of days until the bday occurs. 
     The birthday object is received in datetime format."""
 
     today = datetime.date.today()
-    next_bday = birthday.replace(year=today.year + 1)
+    next_bday = birthday.replace(year=today.year)
+    if next_bday < today:
+        next_bday = birthday.replace(year=today.year + 1)
 
     time_to_bday = next_bday - today
     num_days_until_bday = time_to_bday.days

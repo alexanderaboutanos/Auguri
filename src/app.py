@@ -2,8 +2,8 @@ import time
 from flask import Flask, render_template, redirect, request, session, flash, g
 from sqlalchemy.orm import relationship
 from models import Person, Relationship, Greeting, db, connect_db
-from forms import SignUpForm, LoginForm, AddFriendForm
-from functions import get_friend_list, compile_flask_bday_objs
+from forms import EditFriendForm, SignUpForm, LoginForm, AddFriendForm
+from functions import get_friend_list, compile_flask_bday_objs, make_flask_bday_obj
 
 app = Flask(__name__)
 
@@ -26,7 +26,7 @@ connect_db(app)
 ###############################################################
 
 @app.before_request
-def update_global_variable():
+def load_user():
     """ Check if the user is logged in on the session. If yes, add the user to Flask 'global'. Otherwise, keep the global value to None. """
 
     if CURR_USER_KEY in session:
@@ -46,6 +46,7 @@ def execute_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+
 ###############################################################
 ################# NOT-AUTH PAGES TO FOLLOW ####################
 ###############################################################
@@ -54,12 +55,18 @@ def execute_logout():
 @app.route('/')
 def welcome():
     """ Welcome page, with description of the app and with links to a login or signup. """
+    if CURR_USER_KEY in session:
+        return redirect("/birthdays")
+
     return render_template('/not_auth/welcome.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     """ Shows page where user can sign up. Receives POST request upon signup attempt. """
+
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
 
     form = SignUpForm()
 
@@ -92,14 +99,10 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        try:
-            person = Person.authenticate(
-                username=form.username.data,
-                password=form.password.data
-            )
-            db.session.commit()
-        except:
-            return render_template('/not_auth/login.html')
+        person = Person.authenticate(
+            username=form.username.data,
+            password=form.password.data
+        )
 
         execute_login(person)
 
@@ -108,15 +111,127 @@ def login():
     return render_template('/not_auth/login.html', form=form)
 
 
+@app.route('/logout')
+def logout():
+    """Handle logout of user."""
+    execute_logout()
+    return redirect("/")
+
+
 ###############################################################
 #################### AUTH PAGES TO FOLLOW #####################
 ###############################################################
 
+##########################  BIRTHDAY  ############################
+
 @app.route('/birthdays')
 def birthdays():
     """show birthdays"""
+
+    if not g.person:
+        return redirect("/")
+
     friend_lst = get_friend_list(g.person.id)
     flask_bday_objs = compile_flask_bday_objs(friend_lst)
-
-    # The object is complete with first and last name, img_url, birthday, and a countdown # of days until their bday.
     return render_template('/auth/birthdays.html', flask_bday_objs=flask_bday_objs)
+
+##########################  FRIEND  ############################
+
+
+@app.route('/friend/<int:friend_id>')
+def show_friend(friend_id):
+    """ Show information for individual friend. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # send to user_edit if user tries to edit himself
+    if friend_id == g.person.id:
+        return redirect("/user/edit")
+
+    # get the info for the friend
+    friend = Person.query.get(friend_id)
+
+    # if the friend isn't actually a friend of the user, send user back to birthday page.
+    if friend not in get_friend_list(g.person.id):
+        return redirect("/birthdays")
+
+    # prepare the friend object for flask
+    flask_bday_obj = make_flask_bday_obj(friend)
+
+    return render_template('/auth/friend_indv.html', friend=flask_bday_obj)
+
+
+@app.route('/friend/<int:friend_id>/edit', methods=['GET', 'POST'])
+def edit_friend(friend_id):
+    """ Edit information for individual friend. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # send to user_edit if user tries to edit himself
+    if friend_id == g.person.id:
+        return redirect("/user/edit")
+
+    # get the info for the friend
+    friend = Person.query.get(friend_id)
+
+    # if the friend isn't actually a friend of the user, send user back to birthday page.
+    if friend not in get_friend_list(g.person.id):
+        return redirect("/birthdays")
+
+    # load the form
+    form = EditFriendForm(obj=friend)
+
+    # Handle POST request with new friend data
+    if form.validate_on_submit():
+        friend.email_address = form.email_address.data
+        friend.first_name = form.first_name.data
+        friend.last_name = form.last_name.data
+        friend.img_url = form.img_url.data
+        friend.birthday = form.birthday.data
+        db.session.commit()
+        return redirect(f"/friend/{friend.id}")
+
+    return render_template('/auth/friend_indv_edit.html', form=form)
+
+
+@app.route('/friend/add', methods=['GET', 'POST'])
+def add_friend():
+    """ add friend. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # load the form
+    form = AddFriendForm()
+
+    # Handle POST request with new friend data
+    if form.validate_on_submit():
+        new_friend = Person(
+            email_address=form.email_address.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            img_url=form.img_url.data,
+            birthday=form.birthday.data,
+            username=None,
+            password=""
+        )
+        db.session.add(new_friend)
+        db.session.commit()
+
+        print(new_friend)
+
+        new_rel = Relationship(
+            user_id=g.person.id, friend_id=new_friend.id, relationship="")
+        db.session.add(new_rel)
+        db.session.commit()
+
+        return redirect("/")
+
+    return render_template('/auth/friend_add.html', form=form)
+
+##########################  USER  ############################

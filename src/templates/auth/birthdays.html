@@ -9,8 +9,9 @@ content %}
     <li>
       <p>Name: {{person['first_name']}} {{person['last_name']}}</p>
       <p>Birthday: {{person['birthday']}}</p>
-      <p>Countdown: {{person['countdown']}}</p>
+      <p>Countdown: {{person['countdown']}} day(s)</p>
       <img src="{{person['img_url']}}" alt="" />
+      <p><a href="/friend/{{person['id']}}/edit">Edit</a></p>
     </li>
     {% endfor %}
   </ul>

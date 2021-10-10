@@ -2,5 +2,13 @@
 
 {% extends 'base.html' %}{% block title %} 'Hello' {% endblock %}{% block
 content %}
-<h1>hello</h1>
+<h1>Add friend</h1>
+<form method="POST" id="friend_add_form">
+  {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
+  'hidden' %}
+  <p>{{field.label}} {{field}}</p>
+  {% endfor %}
+
+  <button>Edit!</button>
+</form>
 {% endblock %}
