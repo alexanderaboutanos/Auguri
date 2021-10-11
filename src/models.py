@@ -36,7 +36,7 @@ class Person(db.Model):
 
     img_url = db.Column(
         db.Text,
-        default='static/images/default_person_img.jpeg'
+        default='../static/images/default_person_img.jpeg'
     )
 
     birthday = db.Column(
