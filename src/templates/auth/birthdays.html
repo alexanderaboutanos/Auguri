@@ -2,18 +2,51 @@
 
 {% extends 'base.html' %}{% block title %} Birthdays {% endblock %}{% block
 content %}
-<h1>Birthday List!</h1>
-<div>
-  <ul>
-    {% for person in flask_bday_objs %}
-    <li>
-      <p>Name: {{person['first_name']}} {{person['last_name']}}</p>
-      <p>Birthday: {{person['birthday']}}</p>
-      <p>Countdown: {{person['countdown']}} day(s)</p>
-      <img src="{{person['img_url']}}" alt="" />
-      <p><a href="/friend/{{person['id']}}/edit">Edit</a></p>
-    </li>
-    {% endfor %}
-  </ul>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center mb-5">
+      <h2 class="heading-section">Birthday List</h2>
+    </div>
+  </div>
+  <table class="table table-hover bg-light rounded">
+    <thead>
+      <th>&nbsp;</th>
+      <th>Friend</th>
+      <th>Birthday</th>
+      <th>Age</th>
+      <th class="text-center">Birthday Countdown <i>(# of days)</i></th>
+      <th>&nbsp;</th>
+    </thead>
+    <tbody>
+      {% for person in flask_bday_objs %}
+      <tr>
+        <th>
+          <!-- <img
+            src="{{person['img_url']}}"
+            class="img-container"
+            alt=""
+            style="width: 50px; height: 50px"
+          /> -->
+        </th>
+        <td>{{person['first_name']}} {{person['last_name']}}</td>
+        <td>{{person['birthday']}}</td>
+        <td>Old</td>
+        <td class="text-center">
+          <span class="display-6">{{person['countdown']}}</span>
+        </td>
+        <td>
+          <a class="btn btn-success btn-sm" href="/friend/{{person['id']}}"
+            >Details</a
+          >
+          <a class="btn btn-primary btn-sm" href="/friend/{{person['id']}}/edit"
+            >Edit</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}
+
+<!-- <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2232%22%20height%3D%2232%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_17c7110e249%20text%20%7B%20fill%3A%23007bff%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A2pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_17c7110e249%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23007bff%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2212.2890625%22%20y%3D%2216.9%22%3E32x32%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="width: 32px; height: 32px;"> -->
