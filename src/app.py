@@ -233,6 +233,32 @@ def add_friend():
 
     return render_template('/auth/friend_add.html', form=form)
 
+
+@app.route('/friend/<int:friend_id>/delete', methods=['POST'])
+def delete_friend(friend_id):
+    """ delete friend. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # send to birthdays if user tries to delete himself
+    if friend_id == g.person.id:
+        return redirect("/")
+
+    # get the info for the friend
+    friend = Person.query.get(friend_id)
+
+    # if the friend isn't actually a friend of the user.
+    if friend not in get_friend_list(g.person.id):
+        return redirect("/birthdays")
+
+    # delete the friend
+    db.session.delete(friend)
+    db.session.commit()
+
+    return redirect("/")
+
 ##########################  USER  ############################
 
 

@@ -2,13 +2,27 @@
 
 {% extends 'base.html' %}{% block title %} 'Hello' {% endblock %}{% block
 content %}
-<h1>Here is your personal account info...</h1>
-<div>
-  <p>Name: {{user['first_name']}} {{user['last_name']}}</p>
-  <p>Birthday: {{user['birthday']}}</p>
-  <p>Countdown: {{user['countdown']}}</p>
-  <p>Username: {{user['username']}}</p>
-  <img src="{{user['img_url']}}" alt="" />
-  <p><a href="/user/edit">Edit user</a></p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 bg-light">
+      <h1>Your personal account information:</h1>
+      <div>
+        <img src="{{user['img_url']}}" alt="" />
+        <br />
+        <p>Name: {{user['first_name']}} {{user['last_name']}}</p>
+        <p>Birthday: {{user['birthday']}}</p>
+        <p>Age: {{user['age']}} years old</p>
+        <p>Days until your birthday: {{user['countdown']}}</p>
+
+        <hr />
+        <p>
+          <a class="btn btn-outline-primary" href="/user/edit"
+            >Edit your information</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

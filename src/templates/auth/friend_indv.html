@@ -2,12 +2,28 @@
 
 {% extends 'base.html' %}{% block title %} 'Hello' {% endblock %}{% block
 content %}
-<h1>Here is your friend info...</h1>
-<div>
-  <p>Name: {{friend['first_name']}} {{friend['last_name']}}</p>
-  <p>Birthday: {{friend['birthday']}}</p>
-  <p>Countdown: {{friend['countdown']}}</p>
-  <img src="{{friend['img_url']}}" alt="" />
-  <p><a href="/friend/{{friend['id']}}/edit">Edit user</a></p>
+
+<div class="container">
+<div class="row">
+<div class="col-md-4 bg-light">
+  <h1>{{friend['first_name']}} {{friend['last_name']}}</h1>
+  <div>
+    <img src="{{friend['img_url']}}" alt="" />
+    <br />
+    <p>Birthday: {{friend['birthday']}}</p>
+    <p>Age: {{friend['age']}} years old</p>
+    <p>Days until birthday: {{friend['countdown']}}</p>
+
+    <hr>
+    <p><a class="btn btn-outline-primary" href="/friend/{{friend['id']}}/edit">Edit friend</a></p>
+    <p>
+      <form method="POST" action="/friend/{{friend['id']}}/delete">
+        <button class="btn btn-outline-primary">Delete friend</button>
+      </form>
+    </p>
+  </div>
+  </div>
+  </div>
 </div>
+
 {% endblock %}

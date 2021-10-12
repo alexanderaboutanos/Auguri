@@ -2,13 +2,25 @@
 
 {% extends 'base.html' %}{% block title %} 'Hello' {% endblock %}{% block
 content %}
-<h1>Edit your friend.</h1>
-<form method="POST" id="friend_edit_form">
-  {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
-  'hidden' %}
-  <p>{{field.label}} {{field}}</p>
-  {% endfor %}
+<div class="container-fluid form-group">
+  <h1>Edit Friend Information</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <form method="POST" id="friend_edit_form">
+        {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
+        'hidden' %}
+        <p>
+          <span class="font-weight-bold"
+            >{{field.label(class_="form-control bg-light")}}</span
+          >
+          {{field(class_="form-control")}}
+        </p>
+        {% endfor %}
 
-  <button>Edit!</button>
-</form>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </form>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

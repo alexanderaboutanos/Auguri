@@ -131,12 +131,12 @@ class Relationship(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('people.id')
+        db.ForeignKey('people.id', ondelete='CASCADE')
     )
 
     friend_id = db.Column(
         db.Integer,
-        db.ForeignKey('people.id')
+        db.ForeignKey('people.id', ondelete='CASCADE')
     )
 
     relationship = db.Column(
@@ -165,7 +165,7 @@ class Greeting(db.Model):
 
     recipient_id = db.Column(
         db.Integer,
-        db.ForeignKey('people.id')
+        db.ForeignKey('people.id', ondelete='CASCADE')
     )
 
     greeting = db.Column(

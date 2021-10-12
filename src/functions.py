@@ -48,7 +48,8 @@ def make_flask_bday_obj(person):
         'last_name': person.last_name,
         'img_url': person.img_url,
         'countdown': num_days_until_bday(person.birthday),
-        'birthday': person.birthday,
+        'age': how_old(person.birthday),
+        'birthday': person.birthday.strftime("%B %d, %Y"),
         'username': person.username
     }
     return bday_obj
@@ -70,3 +71,13 @@ def num_days_until_bday(birthday):
         num_days_until_bday = 0
 
     return num_days_until_bday
+
+
+def how_old(birthday):
+    """ This function calculates age."""
+
+    today = datetime.date.today()
+    age = today.year - birthday.year - \
+        ((today.month, today.day) < (birthday.month, birthday.day))
+
+    return age
