@@ -14,7 +14,7 @@
       {{form.hidden_tag()}}
       <img
         class="mb-4"
-        src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+        src="../../static/images/auguri-logo.png"
         alt=""
         width="72"
         height="72"
@@ -22,11 +22,14 @@
       <h1 class="h3 mb-3 font-weight-normal">Create a new account!</h1>
       {% for field in form if field.widget.input_type != 'hidden' %}
       <div>
-        <p>
-          {{field.label(class_="form-control form-control-sm")}}
-          {{field(class_="form-control form-control-sm")}}
-        </p>
+        {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        <p>{{ field(placeholder=field.label.text, class="form-control")}}</p>
       </div>
+      {% endfor %} {% for category, message in
+      get_flashed_messages(with_categories=True) %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %}
       <button class="btn btn-lg btn-primary btn-block" type="submit">
         Create Account

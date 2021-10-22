@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, PasswordField, StringField, DateField, validators
 from wtforms.validators import DataRequired, Email, Length, Optional
+from wtforms.fields.html5 import DateField
 
 
 class SignUpForm(FlaskForm):

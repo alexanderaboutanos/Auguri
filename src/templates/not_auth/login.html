@@ -14,16 +14,17 @@
       {{form.hidden_tag()}}
       <img
         class="mb-4"
-        src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+        src="../../static/images/auguri-logo.png"
         alt=""
         width="72"
         height="72"
       />
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
       {% for field in form if field.widget.input_type != 'hidden' %}
-      <p>
-        {{field.label(class_="form-control")}} {{field(class_="form-control")}}
-      </p>
+      <p>{{ field(placeholder=field.label.text, class="form-control")}}</p>
+      {% endfor %} {% for category, message in
+      get_flashed_messages(with_categories=True) %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %}
       <button class="btn btn-lg btn-primary btn-block" type="submit">
         Login

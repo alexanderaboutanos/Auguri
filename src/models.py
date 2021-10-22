@@ -20,17 +20,17 @@ class Person(db.Model):
     )
 
     email_address = db.Column(
-        db.String(75),
+        db.Text,
         nullable=False
     )
 
     first_name = db.Column(
-        db.String(50),
+        db.Text,
         nullable=False
     )
 
     last_name = db.Column(
-        db.String(50),
+        db.Text,
         nullable=False
     )
 
@@ -45,7 +45,7 @@ class Person(db.Model):
     )
 
     username = db.Column(
-        db.String(75),
+        db.Text,
         nullable=True,
         unique=True
     )

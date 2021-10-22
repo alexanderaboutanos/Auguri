@@ -21,7 +21,12 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from models import Person
 from app import app
+from dotenv import load_dotenv
 from functions import num_days_until_bday
+
+# call an environment variable
+load_dotenv()
+token = os.environ.get("api-token")
 
 
 def check_for_birthdays():
@@ -79,7 +84,7 @@ def send_email(sender_id, recipient_id, subject, body):
         html_content=body)
 
     try:
-        sg = SendGridAPIClient()
+        sg = SendGridAPIClient(token)
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
@@ -89,4 +94,19 @@ def send_email(sender_id, recipient_id, subject, body):
 
 
 # START THE API. Called each midnight.
-check_for_birthdays()
+# check_for_birthdays()
+
+
+message = Mail(
+    from_email='app.auguri@gmail.com',
+    to_emails='alexanderaboutanos@gmail.com',
+    subject='Sending with Twilio SendGrid is Fun',
+    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+try:
+    sg = SendGridAPIClient(token)
+    response = sg.send(message)
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+except Exception as e:
+    print(e.message)

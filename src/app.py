@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from models import Person, Relationship, Greeting, db, connect_db
 from forms import EditFriendForm, SignUpForm, LoginForm, AddFriendForm, EditUserForm
 from functions import get_friend_list, compile_flask_bday_objs, make_flask_bday_obj
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
@@ -82,8 +83,9 @@ def signup():
                 password=form.password.data
             )
             db.session.commit()
-        except:
-            return render_template('/not_auth/signup.html')
+        except IntegrityError as e:
+            flash("Username already taken", 'danger')
+            return render_template('/not_auth/signup.html', form=form)
 
         execute_login(person)
 
@@ -104,8 +106,11 @@ def login():
             password=form.password.data
         )
 
-        execute_login(person)
-        return redirect('/birthdays')
+        if person:
+            execute_login(person)
+            return redirect('/birthdays')
+
+        flash("Invalid credentials.", 'danger')
 
     return render_template('/not_auth/login.html', form=form)
 
@@ -292,13 +297,19 @@ def edit_user():
 
     # Handle POST request with new friend data
     if form.validate_on_submit():
-        g.person.email_address = form.email_address.data
-        g.person.first_name = form.first_name.data
-        g.person.last_name = form.last_name.data
-        g.person.username = form.username.data
-        g.person.img_url = form.img_url.data
-        g.person.birthday = form.birthday.data
-        db.session.commit()
+        try:
+            g.person.email_address = form.email_address.data
+            g.person.first_name = form.first_name.data
+            g.person.last_name = form.last_name.data
+            g.person.username = form.username.data
+            g.person.img_url = form.img_url.data
+            g.person.birthday = form.birthday.data
+            db.session.commit()
+
+        except IntegrityError as e:
+            flash("Username already taken", 'danger')
+            return render_template('/auth/user_edit.html', form=form)
+
         return redirect("/birthdays")
 
     return render_template('/auth/user_edit.html', form=form)

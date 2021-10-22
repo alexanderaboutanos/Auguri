@@ -4,3 +4,4 @@ __pycache__
 sendgrid.env
 /src/__pycache__
 /seed/__pycache__
+.env
