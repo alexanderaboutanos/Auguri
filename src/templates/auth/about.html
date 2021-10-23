@@ -1,0 +1,49 @@
+<!-- @format -->
+
+{% extends 'base.html' %}{% block title %} About Auguri {% endblock %}{% block
+content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center mb-5">
+      <h2 class="heading-section display-6 align-middle">Welcome to Auguri</h2>
+    </div>
+  </div>
+  <div class="container">
+    <div class="col-md-6">
+      <img
+        class="img-fluid"
+        src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2164&q=80"
+        alt=""
+      />
+    </div>
+    <br />
+    <h2>Getting Started</h2>
+    <p>
+      Welcome to a revolutionary birthday application! Once a user has
+      sucessfully signed up for an account, they will be directed to the
+      <b>main page</b>, which shows a list of their friends and the number of
+      days until their birthday. Users are encouraged to add new friends.
+    </p>
+    <h2>Sending Personal Greetings</h2>
+    <p>
+      This incredible application possesses the powerful capability of emailing
+      you and your friends. Here, there is a variety of different options...
+    </p>
+
+    <p>
+      <b>[Option 1]</b> You may want to construct pre-written personal messages for each of
+      your friends. If your write a personal message, that message will be sent to
+      your friend at exactly midnight on the day of their birthday. Your friend will surely feel cared for! 
+    </p>
+    <p>
+      <b>[Option 2]</b> You may choose not to write any personal birthday greetings through Auguri.
+      In this case, Auguri will not email your friends on their birthday.
+      Instead, Auguri will email <i>you</i> with a small reminder.
+    </p>
+      <b>[Option 3]</b> You are also welcome to do a combination of these choices... writing automated personal messages for some friends and not doing so for others. 
+    </p>
+
+  </div>
+</div>
+{% endblock %}

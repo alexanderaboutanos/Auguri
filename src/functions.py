@@ -1,5 +1,5 @@
 import datetime
-from models import Relationship
+from models import Relationship, Greeting
 from flask import g
 
 
@@ -50,6 +50,7 @@ def make_flask_bday_obj(person):
         'countdown': num_days_until_bday(person.birthday),
         'age': how_old(person.birthday),
         'birthday': person.birthday.strftime("%B %d, %Y"),
+        'greeting': Greeting.query.filter_by(recipient_id=person.id).first(),
         'username': person.username
     }
     return bday_obj

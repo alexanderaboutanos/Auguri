@@ -126,7 +126,19 @@ def logout():
 #################### AUTH PAGES TO FOLLOW #####################
 ###############################################################
 
+##########################  ABOUT  ############################
+
+@app.route('/about')
+def about():
+    """show a quick about page explaining what Auguri is capable of. """
+
+    if not g.person:
+        return redirect("/")
+
+    return render_template('/auth/about.html')
+
 ##########################  BIRTHDAY  ############################
+
 
 @app.route('/birthdays')
 def birthdays():
@@ -164,7 +176,10 @@ def show_friend(friend_id):
     # prepare the friend object for flask
     flask_bday_obj = make_flask_bday_obj(friend)
 
-    return render_template('/auth/friend_indv.html', friend=flask_bday_obj)
+    # greeting = Greeting.query.get(friend.creator_rel[0].friend_id)
+    greeting = Greeting.query.filter_by(recipient_id=friend.id).first()
+
+    return render_template('/auth/friend_indv.html', friend=flask_bday_obj, greeting=greeting)
 
 
 @app.route('/friend/<int:friend_id>/edit', methods=['GET', 'POST'])
@@ -197,6 +212,17 @@ def edit_friend(friend_id):
         friend.img_url = form.img_url.data
         friend.birthday = form.birthday.data
         db.session.commit()
+
+        if form.greeting.data != "":
+            Greeting.query.filter_by(
+                recipient_id=friend.id).delete()
+            new_greeting = Greeting(
+                recipient_id=friend.id,
+                greeting=form.greeting.data
+            )
+            db.session.add(new_greeting)
+            db.session.commit()
+
         return redirect(f"/friend/{friend.id}")
 
     return render_template('/auth/friend_indv_edit.html', form=form)
@@ -227,10 +253,17 @@ def add_friend():
         db.session.add(new_friend)
         db.session.commit()
 
-        print(new_friend)
+        # if the user wanted to include a birthday greeting, add it here.
+        if form.greeting:
+            new_greeting = Greeting(
+                recipient_id=new_friend.id,
+                greeting=form.greeting.data
+            )
+            db.session.add(new_greeting)
+            db.session.commit()
 
         new_rel = Relationship(
-            user_id=g.person.id, friend_id=new_friend.id, relationship="")
+            user_id=g.person.id, friend_id=new_friend.id)
         db.session.add(new_rel)
         db.session.commit()
 
@@ -313,3 +346,28 @@ def edit_user():
         return redirect("/birthdays")
 
     return render_template('/auth/user_edit.html', form=form)
+
+
+##########################  MESSAGES  ############################
+
+@app.route('/greeting/<int:friend_id>/delete', methods=['GET'])
+def delete_greeting(friend_id):
+    """ delete greeting. """
+
+    # send back to homepage if not signed in.
+    if not g.person:
+        return redirect("/")
+
+    # get the info for the greeting
+    friend = Person.query.get(friend_id)
+
+    # send back birthdays if user is not the creator of this greeting
+    if friend not in get_friend_list(g.person.id):
+        return redirect("/birthdays")
+
+    # delete the greeting
+    Greeting.query.filter_by(
+        recipient_id=friend.id).delete()
+    db.session.commit()
+
+    return redirect("/")

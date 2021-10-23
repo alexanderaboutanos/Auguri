@@ -3,6 +3,7 @@
 from enum import unique
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from sqlalchemy.orm import backref
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -54,6 +55,10 @@ class Person(db.Model):
         db.Text,
         nullable=False
     )
+
+    # greeting = db.relationship('Greeting',
+    #                            secondary='relationships',
+    #                            backref='person')
 
     def __repr__(self):
         return f"Person #{self.id}: {self.first_name} {self.last_name}, {self.email_address}, {self.birthday}"
@@ -112,11 +117,6 @@ class Person(db.Model):
             return True
         return False
 
-    # @classmethod
-    # def bday_countdown(cls, birthday):
-    #     num_days = num_days_until_bday(birthday)
-    #     return num_days
-
 
 class Relationship(db.Model):
     """ This is the model for the relationships between people """
@@ -139,12 +139,10 @@ class Relationship(db.Model):
         db.ForeignKey('people.id', ondelete='CASCADE')
     )
 
-    relationship = db.Column(
-        db.Text
-    )
-
-    person_user = db.relationship('Person', foreign_keys=[user_id])
-    person_friend = db.relationship('Person', foreign_keys=[friend_id])
+    person_user = db.relationship(
+        'Person', foreign_keys=[user_id])
+    person_friend = db.relationship(
+        'Person', backref='creator_rel', foreign_keys=[friend_id])
 
 
 class Greeting(db.Model):
@@ -156,11 +154,6 @@ class Greeting(db.Model):
         db.Integer,
         primary_key=True,
         autoincrement=True
-    )
-
-    sender_id = db.Column(
-        db.Integer,
-        db.ForeignKey('people.id')
     )
 
     recipient_id = db.Column(

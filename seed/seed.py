@@ -36,37 +36,38 @@ Person.signup(email_address="s.boyer@gmail.com", first_name="Susanna",
 
 db.session.commit()
 
-greeting1 = Greeting(sender_id=1, recipient_id=2,
-                     greeting="Hello! I'm so glad we met.")
-greeting2 = Greeting(sender_id=1, recipient_id=3,
-                     greeting="OH! It's been too long since we've seen each other.")
-greeting3 = Greeting(sender_id=2, recipient_id=3, greeting="Miss you!")
-greeting4 = Greeting(sender_id=4, recipient_id=5,
-                     greeting="When is our next tea party?")
-greeting5 = Greeting(sender_id=5, recipient_id=4,
-                     greeting="Greetings! Let's meet up for coffee soon!")
+greeting1 = Greeting(recipient_id=2,
+                     greeting="Hello! I'm so glad we met. I hope you have a wonderful bday")
+greeting2 = Greeting(recipient_id=3,
+                     greeting="OH! It's been too long since we've seen each other. That being said, have a wonderful birthday!")
+greeting3 = Greeting(recipient_id=4,
+                     greeting="Happy Birthday! I miss you!")
+greeting4 = Greeting(recipient_id=5,
+                     greeting="Happy Birthday my dear friend! When is our next tea party?")
+greeting5 = Greeting(recipient_id=4,
+                     greeting="IT'S YOUR BIRTHDAY!!!! Enjoy it. Let's meet up for coffee soon!")
 
 db.session.add_all([greeting1, greeting2, greeting3, greeting4, greeting5])
 db.session.commit()
 
 relationship1 = Relationship(
-    user_id=1, friend_id=2, relationship="brother")
+    user_id=1, friend_id=2)
 relationship2 = Relationship(
-    user_id=1, friend_id=3, relationship="brother")
+    user_id=1, friend_id=3)
 relationship3 = Relationship(
-    user_id=2, friend_id=3, relationship="brother")
+    user_id=2, friend_id=4)
 relationship4 = Relationship(
-    user_id=4, friend_id=5, relationship="spouse")
-relationship5 = Relationship(user_id=4, friend_id=1, relationship="son")
+    user_id=4, friend_id=5)
+relationship5 = Relationship(user_id=4, friend_id=1)
 relationship6 = Relationship(
-    user_id=1, friend_id=8, relationship="cousin")
+    user_id=1, friend_id=8)
 relationship7 = Relationship(
-    user_id=1, friend_id=9, relationship="cousin")
+    user_id=1, friend_id=9)
 relationship8 = Relationship(
-    user_id=2, friend_id=10, relationship="cousin")
+    user_id=2, friend_id=10)
 relationship9 = Relationship(
-    user_id=4, friend_id=7, relationship="cousin")
-relationship10 = Relationship(user_id=4, friend_id=6, relationship="cousin")
+    user_id=4, friend_id=7)
+relationship10 = Relationship(user_id=4, friend_id=6)
 
 db.session.add_all([relationship1, relationship2,
                    relationship3, relationship4, relationship5, relationship6, relationship7, relationship8, relationship9, relationship10])
