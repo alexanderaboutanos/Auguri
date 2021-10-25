@@ -56,10 +56,6 @@ class Person(db.Model):
         nullable=False
     )
 
-    # greeting = db.relationship('Greeting',
-    #                            secondary='relationships',
-    #                            backref='person')
-
     def __repr__(self):
         return f"Person #{self.id}: {self.first_name} {self.last_name}, {self.email_address}, {self.birthday}"
 
