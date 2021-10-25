@@ -14,6 +14,9 @@ db.create_all()
 
 
 app.config['WTF_CSRF_ENABLED'] = False
+app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
+app.config["FLASK_DEBUG"] = False
+app.config["TESTING"] = True
 
 
 class AppViewTestCase(TestCase):
@@ -66,28 +69,40 @@ class AppViewTestCase(TestCase):
             resp = c.get("/birthdays")
             self.assertEqual(resp.status_code, 200)
 
-    def test_2_view_friend(self):
-        p3 = Person.signup(email_address="test3@gmail.com", first_name="Test3_first",
-                           last_name="Test3_last", img_url="", birthday="2003-03-03", username="test3", password="password1")
-        pid3 = 1003
-        p3.id = pid3
-        db.session.commit()
-
-        new_rel = Relationship(user_id=1001, friend_id=1003)
-        db.session.add(new_rel)
-        db.session.commit()
-
+    def test_2_view_about_page(self):
         with self.client as c:
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.p1.id
-                g.person = Person.query.get(self.p1.id)
 
-                resp = c.get("/friend/1003")
-                print('***********************************************')
-                print(resp.data)
-                print('***********************************************')
-                self.assertEqual(resp.status_code, 200)
+            resp = c.get("/about")
+            html = str(resp.data)
 
-    # def test_3_(self):
-    # def test_4_(self):
-    # def test_5_(self):
+            self.assertIn(
+                "Welcome to a revolutionary birthday application!", html)
+
+    def test_3_unauthorized_access(self):
+        with self.client as c:
+            resp = c.get("/birthdays", follow_redirects=True)
+            html = str(resp.data)
+
+            self.assertIn(
+                "Welcome to the birthday solution", html)
+            self.assertNotIn(
+                "test1", html
+            )
+
+    def test_4_add_friend(self):
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.p1.id
+
+            resp = c.get("/friend/add")
+            html = str(resp.data)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                "Email Address", html)
+            self.assertIn(
+                "First Name", html)
+            self.assertIn(
+                "Last Name", html)

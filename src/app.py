@@ -176,7 +176,6 @@ def show_friend(friend_id):
     # prepare the friend object for flask
     flask_bday_obj = make_flask_bday_obj(friend)
 
-    # greeting = Greeting.query.get(friend.creator_rel[0].friend_id)
     greeting = Greeting.query.filter_by(recipient_id=friend.id).first()
 
     return render_template('/auth/friend_indv.html', friend=flask_bday_obj, greeting=greeting)
