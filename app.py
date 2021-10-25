@@ -5,6 +5,7 @@ from models import Person, Relationship, Greeting, db, connect_db
 from forms import EditFriendForm, SignUpForm, LoginForm, AddFriendForm, EditUserForm
 from functions import get_friend_list, compile_flask_bday_objs, make_flask_bday_obj
 from sqlalchemy.exc import IntegrityError
+import os
 
 app = Flask(__name__)
 
@@ -14,7 +15,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///auguri'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
-app.config['SECRET_KEY'] = "abc123"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'hellosecret1')
+print('###############################################################')
+print(app.config['SECRET_KEY'])
+print('###############################################################')
 
 # to show paths
 # app.config['EXPLAIN_TEMPLATE_LOADING'] = True
