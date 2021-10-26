@@ -13,7 +13,7 @@ CURR_USER_KEY = "curr_user"
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 #     'DATABASE_URL', 'postgresql://auguri')
-SQLALCHEMY_DATABASE_URI = os.environ.get(
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL').replace("://", "ql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
