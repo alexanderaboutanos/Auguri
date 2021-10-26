@@ -1,5 +1,5 @@
-import sys  # nopep8
-sys.path.append(r'../src')  # nopep8
+# import sys  # nopep8
+# sys.path.append(r'../src')  # nopep8
 
 from app import db
 from models import Person, Relationship, Greeting
