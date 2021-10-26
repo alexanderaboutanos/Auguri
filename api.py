@@ -118,9 +118,12 @@ def prep_appropriate_emails(todays_bdays):
 def send_email(sender_id, recipient_id, subject, body):
     """ send an email. """
 
+    p = Person.query.get(recipient_id)
+    recipient_email = p.email_address
+
     message = Mail(
         from_email='app.auguri@gmail.com',
-        to_emails=f'{Person.recipient_id.email_address}',
+        to_emails=recipient_email,
         subject=subject,
         html_content=body)
 
