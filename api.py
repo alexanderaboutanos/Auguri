@@ -77,12 +77,17 @@ def prep_appropriate_emails(todays_bdays):
                     sender_id=0,
                     recipient_id=birthday_person.id,
                     subject="Happy Birthday!",
-                    body=f"{greeting.greeting}")
+                    body=f"{greeting.greeting}"
+                )
 
                 # tell the user that you sent this 'greeting' to the friend
+                relationship = Relationship.query.filter_by(
+                    friend_id=greeting.recipient_id).first()
+                corresponding_user = relationship.person_user
+
                 send_email(
                     sender_id=0,
-                    recipient_id=greeting.sender_id,
+                    recipient_id=corresponding_user.id,
                     subject="Email sent!",
                     body=f"Auguri sent the following email to {birthday_person.first_name} {birthday_person.last_name}. Message: {greeting.greeting}")
 
@@ -90,7 +95,7 @@ def prep_appropriate_emails(todays_bdays):
                 db.session.delete(greeting)
                 db.session.commit()
 
-                continue
+                break
 
         # If no personal message was prepared to send the friend, remind their corresponding user to send them an email.
 
@@ -100,7 +105,7 @@ def prep_appropriate_emails(todays_bdays):
 
         send_email(
             sender_id=0,
-            recipient_id=corresponding_user,
+            recipient_id=corresponding_user.id,
             subject="Auguri Bday Reminder",
             body=f"Don't forget! {birthday_person.first_name} {birthday_person.last_name} has a birthday today. Send them a message!")
 
@@ -125,7 +130,7 @@ def send_email(sender_id, recipient_id, subject, body):
         from_email='app.auguri@gmail.com',
         to_emails=recipient_email,
         subject=subject,
-        html_content=body)
+        html_content=str(body))
 
     try:
         sg = SendGridAPIClient(token)

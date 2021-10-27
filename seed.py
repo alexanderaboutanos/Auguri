@@ -36,39 +36,31 @@ Person.signup(email_address="s.boyer@gmail.com", first_name="Susanna",
 
 db.session.commit()
 
-greeting1 = Greeting(recipient_id=2,
+greeting1 = Greeting(recipient_id=6,
                      greeting="Hello! I'm so glad we met. I hope you have a wonderful bday")
-greeting2 = Greeting(recipient_id=3,
+greeting2 = Greeting(recipient_id=7,
                      greeting="OH! It's been too long since we've seen each other. That being said, have a wonderful birthday!")
-greeting3 = Greeting(recipient_id=4,
+greeting3 = Greeting(recipient_id=8,
                      greeting="Happy Birthday! I miss you!")
-greeting4 = Greeting(recipient_id=5,
+greeting4 = Greeting(recipient_id=9,
                      greeting="Happy Birthday my dear friend! When is our next tea party?")
-greeting5 = Greeting(recipient_id=4,
+greeting5 = Greeting(recipient_id=10,
                      greeting="IT'S YOUR BIRTHDAY!!!! Enjoy it. Let's meet up for coffee soon!")
 
 db.session.add_all([greeting1, greeting2, greeting3, greeting4, greeting5])
 db.session.commit()
 
 relationship1 = Relationship(
-    user_id=1, friend_id=2)
+    user_id=1, friend_id=6)
 relationship2 = Relationship(
-    user_id=1, friend_id=3)
+    user_id=2, friend_id=7)
 relationship3 = Relationship(
-    user_id=2, friend_id=4)
+    user_id=3, friend_id=8)
 relationship4 = Relationship(
-    user_id=4, friend_id=5)
-relationship5 = Relationship(user_id=4, friend_id=1)
-relationship6 = Relationship(
-    user_id=1, friend_id=8)
-relationship7 = Relationship(
-    user_id=1, friend_id=9)
-relationship8 = Relationship(
-    user_id=2, friend_id=10)
-relationship9 = Relationship(
-    user_id=4, friend_id=7)
-relationship10 = Relationship(user_id=4, friend_id=6)
+    user_id=4, friend_id=9)
+relationship5 = Relationship(user_id=5, friend_id=10)
+
 
 db.session.add_all([relationship1, relationship2,
-                   relationship3, relationship4, relationship5, relationship6, relationship7, relationship8, relationship9, relationship10])
+                   relationship3, relationship4, relationship5])
 db.session.commit()
