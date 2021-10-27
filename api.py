@@ -107,7 +107,7 @@ def prep_appropriate_emails(todays_bdays):
             sender_id=0,
             recipient_id=corresponding_user.id,
             subject="Auguri Bday Reminder",
-            body=f"Don't forget! {birthday_person.first_name} {birthday_person.last_name} has a birthday today. Send them a message!")
+            body=f"Don't forget! {birthday_person.first_name} {birthday_person.last_name} has a birthday today.")
 
     # for user bdays, users will be congratulated from the auguri APP
     for birthday_person in user_bdays:
